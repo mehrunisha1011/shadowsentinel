@@ -1,0 +1,106 @@
+{
+  "order_level": {
+    "flagged": 78,
+    "true_positives": 78,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "ring_level": {
+    "total_rings": 12,
+    "rings_caught_50pct_overlap": 12,
+    "detail": {
+      "RING-001": {
+        "size": 9,
+        "best_overlap": 9,
+        "caught": true
+      },
+      "RING-002": {
+        "size": 6,
+        "best_overlap": 6,
+        "caught": true
+      },
+      "RING-003": {
+        "size": 4,
+        "best_overlap": 4,
+        "caught": true
+      },
+      "RING-004": {
+        "size": 7,
+        "best_overlap": 7,
+        "caught": true
+      },
+      "RING-005": {
+        "size": 8,
+        "best_overlap": 8,
+        "caught": true
+      },
+      "RING-006": {
+        "size": 4,
+        "best_overlap": 4,
+        "caught": true
+      },
+      "RING-007": {
+        "size": 9,
+        "best_overlap": 9,
+        "caught": true
+      },
+      "RING-008": {
+        "size": 9,
+        "best_overlap": 9,
+        "caught": true
+      },
+      "RING-009": {
+        "size": 5,
+        "best_overlap": 5,
+        "caught": true
+      },
+      "RING-010": {
+        "size": 6,
+        "best_overlap": 6,
+        "caught": true
+      },
+      "RING-011": {
+        "size": 5,
+        "best_overlap": 5,
+        "caught": true
+      },
+      "RING-012": {
+        "size": 6,
+        "best_overlap": 6,
+        "caught": true
+      }
+    }
+  },
+  "false_positive_traps": {
+    "total_traps": 6,
+    "traps_wrongly_flagged": 0,
+    "detail": {
+      "TRAP-001": {
+        "wrongly_flagged": false
+      },
+      "TRAP-002": {
+        "wrongly_flagged": false
+      },
+      "TRAP-003": {
+        "wrongly_flagged": false
+      },
+      "TRAP-004": {
+        "wrongly_flagged": false
+      },
+      "TRAP-005": {
+        "wrongly_flagged": false
+      },
+      "TRAP-006": {
+        "wrongly_flagged": false
+      }
+    }
+  },
+  "economic_cost": {
+    "false_positive_cost_inr": 0,
+    "false_negative_cost_inr_est": 0,
+    "false_positive_cost_pct_of_volume": 0.0
+  }
+}

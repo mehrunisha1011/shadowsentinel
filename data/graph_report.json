@@ -1,0 +1,516 @@
+{
+  "flag_threshold": 0.5,
+  "components": [
+    {
+      "component_id": "CC-0008",
+      "order_ids": [
+        "ORD-19a99c789f",
+        "ORD-3829ecd984",
+        "ORD-90adbf4bd0",
+        "ORD-42b15a7ac7",
+        "ORD-4f3c2d9bfb",
+        "ORD-f70f2eabce",
+        "ORD-15868fff92"
+      ],
+      "size": 7,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.95,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.857,
+      "vpa_rotation": 0.857,
+      "edge_signal_counts": {
+        "vpa": 21,
+        "device": 21,
+        "geo": 4
+      },
+      "why": "7/7 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 7 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0017",
+      "order_ids": [
+        "ORD-3968fcebec",
+        "ORD-b4be16ceb7",
+        "ORD-46eff79fd4",
+        "ORD-37f99e5083",
+        "ORD-05573e5026",
+        "ORD-12d6001e60",
+        "ORD-a1643b66fb",
+        "ORD-887d3dbb28"
+      ],
+      "size": 8,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9375,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.875,
+      "vpa_rotation": 0.75,
+      "edge_signal_counts": {
+        "vpa": 28,
+        "device": 28,
+        "geo": 11
+      },
+      "why": "8/8 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 8 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0002",
+      "order_ids": [
+        "ORD-cd78c61f44",
+        "ORD-b0f7c158b1",
+        "ORD-3c12fd3aef",
+        "ORD-3f8b3d8ff5",
+        "ORD-3689ff3e83"
+      ],
+      "size": 5,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.93,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.8,
+      "vpa_rotation": 0.8,
+      "edge_signal_counts": {
+        "vpa": 10,
+        "geo": 4,
+        "device": 10
+      },
+      "why": "5/5 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 5 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0007",
+      "order_ids": [
+        "ORD-62809c6bc3",
+        "ORD-a06f4896cb",
+        "ORD-a9d11291a8",
+        "ORD-6db50db8a2",
+        "ORD-c536ee3395",
+        "ORD-6e50b3de9f",
+        "ORD-be24eb2765",
+        "ORD-83b590a712",
+        "ORD-e4abab6c0d"
+      ],
+      "size": 9,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9278,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.889,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 36,
+        "device": 36,
+        "geo": 3
+      },
+      "why": "9/9 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 9 orders; 3 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0010",
+      "order_ids": [
+        "ORD-021e449b4b",
+        "ORD-611233e3a9",
+        "ORD-cb4515d961",
+        "ORD-bf623f2db2",
+        "ORD-1dd793c3cc",
+        "ORD-de042687ee",
+        "ORD-0b8273b139",
+        "ORD-0e07ea48bb",
+        "ORD-a12539bc13"
+      ],
+      "size": 9,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9278,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.889,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 36,
+        "device": 36,
+        "geo": 6
+      },
+      "why": "9/9 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 9 orders; 3 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0013",
+      "order_ids": [
+        "ORD-0fef5b3d10",
+        "ORD-661e09dd03",
+        "ORD-e56209832d",
+        "ORD-db72c2d1e1",
+        "ORD-56f56485c7",
+        "ORD-71ce9dd0c0",
+        "ORD-50255f5019",
+        "ORD-aa200d748c",
+        "ORD-1c0561c96b"
+      ],
+      "size": 9,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9278,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.889,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 36,
+        "device": 36,
+        "geo": 4
+      },
+      "why": "9/9 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 9 orders; 3 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0001",
+      "order_ids": [
+        "ORD-57991cc35b",
+        "ORD-510ab31cc4",
+        "ORD-bf7a9109e4",
+        "ORD-6837a04cd5",
+        "ORD-72ab0c92ca",
+        "ORD-377df490bf"
+      ],
+      "size": 6,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9167,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.833,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 15,
+        "device": 15,
+        "geo": 2
+      },
+      "why": "6/6 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 6 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0011",
+      "order_ids": [
+        "ORD-aebff861aa",
+        "ORD-5128f471ee",
+        "ORD-038b0cddb0",
+        "ORD-5fb1eee1c4",
+        "ORD-395b8ed6a0",
+        "ORD-3bc399d8a4"
+      ],
+      "size": 6,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9167,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.833,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 15,
+        "device": 15,
+        "geo": 3
+      },
+      "why": "6/6 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 6 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0012",
+      "order_ids": [
+        "ORD-03d446f15e",
+        "ORD-aaeacb80a8",
+        "ORD-c203415b5a",
+        "ORD-34c5f9e279",
+        "ORD-9d8aec3b47",
+        "ORD-47f521f1c3"
+      ],
+      "size": 6,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9167,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.833,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 15,
+        "geo": 7,
+        "device": 15
+      },
+      "why": "6/6 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 6 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0014",
+      "order_ids": [
+        "ORD-35a59cdcc4",
+        "ORD-29a712872f",
+        "ORD-4d1cfd2d43",
+        "ORD-47bb9c5c2e"
+      ],
+      "size": 4,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar"
+      ],
+      "risk_score": 0.9125,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.75,
+      "vpa_rotation": 0.75,
+      "edge_signal_counts": {
+        "vpa": 6,
+        "geo": 3,
+        "device": 6
+      },
+      "why": "4/4 orders disputed as friendly-fraud; spans 4 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar); 1 device fingerprint(s) across 4 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0005",
+      "order_ids": [
+        "ORD-085d29facf",
+        "ORD-057b479dff",
+        "ORD-474f17599c",
+        "ORD-0d9d147a40",
+        "ORD-4d34c28c5c"
+      ],
+      "size": 5,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.9,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.8,
+      "vpa_rotation": 0.6,
+      "edge_signal_counts": {
+        "vpa": 10,
+        "device": 10,
+        "geo": 2
+      },
+      "why": "5/5 orders disputed as friendly-fraud; spans 5 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 5 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0006",
+      "order_ids": [
+        "ORD-34e4161765",
+        "ORD-c28a9412e2",
+        "ORD-d6972d7e77",
+        "ORD-286f2da377"
+      ],
+      "size": 4,
+      "merchants": [
+        "M_ElectroHub",
+        "M_GadgetKart",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.875,
+      "dispute_fraction": 1.0,
+      "device_sharing": 0.75,
+      "vpa_rotation": 0.5,
+      "edge_signal_counts": {
+        "vpa": 6,
+        "device": 6
+      },
+      "why": "4/4 orders disputed as friendly-fraud; spans 4 merchants (M_ElectroHub, M_GadgetKart, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 4 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": true
+    },
+    {
+      "component_id": "CC-0009",
+      "order_ids": [
+        "ORD-2411ce22af",
+        "ORD-e4fb757ed3",
+        "ORD-d51a3b9ebd"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_ElectroHub",
+        "M_FashionNest",
+        "M_GadgetKart"
+      ],
+      "risk_score": 0.4833,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 3,
+        "geo": 3,
+        "device": 3
+      },
+      "why": "spans 3 merchants (M_ElectroHub, M_FashionNest, M_GadgetKart); 1 device fingerprint(s) across 3 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": false
+    },
+    {
+      "component_id": "CC-0004",
+      "order_ids": [
+        "ORD-d81ac61da6",
+        "ORD-bac9e8e1d7",
+        "ORD-5e69c665bc"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_FashionNest",
+        "M_GadgetKart",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.4333,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.333,
+      "edge_signal_counts": {
+        "vpa": 1,
+        "device": 2,
+        "geo": 1
+      },
+      "why": "spans 3 merchants (M_FashionNest, M_GadgetKart, M_TrendMart); 1 device fingerprint(s) across 3 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": false
+    },
+    {
+      "component_id": "CC-0015",
+      "order_ids": [
+        "ORD-a56b3d4b17",
+        "ORD-c8696f8855",
+        "ORD-44cefc5d4d"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_FashionNest",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.4333,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.333,
+      "edge_signal_counts": {
+        "vpa": 1,
+        "device": 2,
+        "geo": 1
+      },
+      "why": "spans 3 merchants (M_FashionNest, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 3 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": false
+    },
+    {
+      "component_id": "CC-0016",
+      "order_ids": [
+        "ORD-23628222dd",
+        "ORD-71f93da4ca",
+        "ORD-a2ca17b5a2"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_FashionNest",
+        "M_HomeBazaar",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.4333,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.333,
+      "edge_signal_counts": {
+        "geo": 1,
+        "device": 2,
+        "vpa": 1
+      },
+      "why": "spans 3 merchants (M_FashionNest, M_HomeBazaar, M_TrendMart); 1 device fingerprint(s) across 3 orders; 2 VPA identity base(s), rotating handles",
+      "flagged": false
+    },
+    {
+      "component_id": "CC-0003",
+      "order_ids": [
+        "ORD-3e3a1e98a8",
+        "ORD-38ae428efe",
+        "ORD-281c953262"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_GadgetKart",
+        "M_TrendMart"
+      ],
+      "risk_score": 0.4,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 3,
+        "geo": 3,
+        "device": 3
+      },
+      "why": "1 device fingerprint(s) across 3 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": false
+    },
+    {
+      "component_id": "CC-0018",
+      "order_ids": [
+        "ORD-206092d199",
+        "ORD-5ab26a9b9d",
+        "ORD-6d03f4d88f"
+      ],
+      "size": 3,
+      "merchants": [
+        "M_GadgetKart",
+        "M_HomeBazaar"
+      ],
+      "risk_score": 0.4,
+      "dispute_fraction": 0.0,
+      "device_sharing": 0.667,
+      "vpa_rotation": 0.667,
+      "edge_signal_counts": {
+        "vpa": 3,
+        "geo": 3,
+        "device": 3
+      },
+      "why": "1 device fingerprint(s) across 3 orders; 1 VPA identity base(s), rotating handles",
+      "flagged": false
+    }
+  ]
+}
