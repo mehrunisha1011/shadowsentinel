@@ -51,6 +51,4 @@ test cases before this number goes in the pitch.
 
 ## Not yet built
 - Neo4j persistence (currently networkx, in-memory)
-- Multi-modal dossier PDF generator
-- Economic false-positive cost model refinement
 - FastAPI webhook endpoint
