@@ -3,6 +3,11 @@ Cross-Merchant Friendly-Fraud Collusion Graph & Auto-Dossier Compiler
 
 Built for Razorpay AI Buildathon 2026 — Track 02: AI Risk Manager
 
+**[Live demo dashboard →](https://mehrunisha1011.github.io/shadowsentinel/frontend/index.html)**
+(runs in demo mode against precomputed results — no setup needed)
+
+![ShadowSentinel dashboard showing a flagged collusion case with its graph, risk factors, and order evidence](dashboard_screenshot.png)
+
 ## The problem
 Friendly fraud: a syndicate orders high-value goods, accepts delivery, then
 claims "item not received" and files a chargeback — rotating UPI handles and
@@ -21,7 +26,34 @@ black-box classifier) so every flag comes with a human-readable reason.
 src/generate_data.py   -> synthetic orders + held-out ground truth
 src/build_graph.py     -> graph construction + component risk scoring
 src/evaluate.py        -> precision/recall/F1 against ground truth (eval-only)
+src/generate_dossier.py -> PDF evidence packet for a flagged cluster
+src/cost_model.py      -> economic threshold sweep (INR cost vs. flag threshold)
+src/api.py             -> FastAPI webhook layer tying it all together
 ```
+
+## Try it live
+The `frontend/index.html` dashboard is deployed via GitHub Pages:
+**https://mehrunisha1011.github.io/shadowsentinel/frontend/index.html**
+
+It opens in DEMO MODE by default (embedded precomputed results, no backend
+needed). To see it running against the real live API instead:
+```bash
+cd src
+uvicorn api:app --port 8000
+```
+then open `frontend/index.html` directly in a browser — it auto-detects the
+running API and switches to LIVE mode, letting you fire real
+`payment.dispute.created` webhook events and download dossiers on demand.
+
+## Tests
+```bash
+pip install pytest
+python3 -m pytest tests/ -v
+```
+13 tests, including two that directly regression-test the multi-signal-edge
+bug described below (over-merging at `min_signals=1` vs. correct separation
+at `min_signals=2`) — not just a coverage number, but a proof that the fix
+documented in ARCHITECTURE.md actually holds.
 
 ## Running it
 ```bash
@@ -50,5 +82,4 @@ treated as a starting point, not a claim — next step is adversarial/noisy
 test cases before this number goes in the pitch.
 
 ## Not yet built
-- Neo4j persistence (currently networkx, in-memory)
-
+- Neo4j persistence (currently networkx, in-memory — not needed at this scale, documented as a future step)
