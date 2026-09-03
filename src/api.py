@@ -29,6 +29,7 @@ import json
 import os
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
@@ -37,6 +38,16 @@ from generate_dossier import build_dossier, load_orders as load_orders_for_dossi
 DATA_DIR = os.environ.get("SHADOWSENTINEL_DATA_DIR", "../data")
 
 app = FastAPI(title="ShadowSentinel API", version="0.1.0")
+
+# Demo-only: permissive CORS so the local static frontend (opened as a file
+# or served separately) can call this API during development/judging.
+# A real deployment would restrict this to the actual frontend origin.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ---- loaded once at startup ----
 _orders = {}
