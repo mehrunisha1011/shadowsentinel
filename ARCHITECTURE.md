@@ -65,3 +65,38 @@ before the fix.
 - Results above are on clean synthetic data. Harder adversarial cases
   (partial VPA rotation, rings with one non-disputing member) have not yet
   been tested.
+
+## Engineering decision: single-file frontend, not a framework
+**Decision:** the dashboard (`frontend/index.html`) is one self-contained
+HTML/CSS/JS file rather than split into separate files or built with
+React/Vue/etc.
+**Problem it solves:** a single file works identically whether opened
+directly (double-click, `file://`) or served remotely (GitHub Pages,
+Render) — no build step, no bundler, no environment-specific breakage.
+This was tested directly: splitting the CSS/JS into separate files works
+fine when served over HTTP, but breaks when opened locally via `file://`
+due to browser cross-origin restrictions on local file loading. For a
+project judged by people who may open it either way, the single file is
+more reliable, not less sophisticated.
+**Alternatives considered:** React + Tailwind (discussed and explicitly
+deprioritized — a framework migration this close to a deadline is a pure
+risk with no functional upside for a project of this size); multi-file
+vanilla split (tested, rejected for the `file://` reason above).
+**Trade-off:** a single ~90KB file is less conventional to browse in a code
+review than a component-per-file structure. Given this project's actual
+size (one dashboard, one data flow), that trade-off is worth it.
+
+## Scope decisions under time pressure
+A few product ideas were deliberately scoped down or skipped rather than
+built partially/poorly:
+- **Geographic intelligence** is a ranked hotspot list computed from real
+  delivery coordinates, not a full interactive map library — a real map
+  integration is a multi-hour addition with real risk of breaking a working
+  demo close to a deadline.
+- **"Sentinel AI"** is a template-based insight generator that reads real
+  case data and produces accurate summaries — not a live paid LLM API call.
+  It's labeled honestly in the UI as template-based, not "trained," because
+  it isn't trained on anything.
+- **Neo4j** was never added; `networkx` (in-memory) handles this dataset's
+  scale correctly, and swapping databases wouldn't change any actual
+  detection result — it's a deployment concern, not a correctness one.
