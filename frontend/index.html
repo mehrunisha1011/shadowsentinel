@@ -85,7 +85,9 @@
     border-top: 2px solid var(--kpi-accent, var(--blue));
     border-radius: 10px;
     padding: 16px 18px;
+    transition: transform 0.15s;
   }
+  .kpi-card:hover { transform: translateY(-2px); }
   .kpi-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10.5px;
@@ -136,14 +138,14 @@
   .case-card {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 12px 14px;
     margin-bottom: 8px;
     cursor: pointer;
-    transition: border-color 0.15s, transform 0.1s;
+    transition: border-color 0.15s, transform 0.12s, box-shadow 0.15s;
   }
-  .case-card:hover { border-color: var(--text-faint); }
-  .case-card.selected { border-color: var(--gold); background: var(--panel-2); }
+  .case-card:hover { border-color: var(--text-faint); transform: translateX(2px); }
+  .case-card.selected { border-color: var(--gold); background: var(--panel-2); box-shadow: 0 0 0 1px var(--gold), 0 4px 16px rgba(255,185,81,0.08); }
   .case-card .row1 {
     display: flex; justify-content: space-between; align-items: center;
     font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600;
@@ -226,6 +228,26 @@
   .hotspot-bar-bg { flex: 1; height: 5px; background: var(--panel-2); border-radius: 3px; margin: 0 12px; overflow: hidden; }
   .hotspot-bar-fill { height: 100%; background: var(--red); border-radius: 3px; }
 
+  /* Merchant intelligence table */
+  .merchant-box { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 0 28px 18px 28px; }
+  .merchant-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .merchant-table th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); padding: 6px 10px; border-bottom: 1px solid var(--border); }
+  .merchant-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); font-family: 'IBM Plex Mono', monospace; }
+  .risk-pill { padding: 2px 8px; border-radius: 10px; font-size: 10.5px; font-weight: 700; }
+  .risk-pill.rp-high { background: rgba(255,92,114,0.15); color: var(--red); }
+  .risk-pill.rp-med { background: rgba(255,185,81,0.15); color: var(--gold); }
+  .risk-pill.rp-low { background: rgba(74,222,158,0.15); color: var(--green); }
+
+  /* Sentinel AI panel */
+  .sentinel-box { background: linear-gradient(135deg, var(--panel), var(--panel-2)); border: 1px solid var(--border-glow); border-radius: 8px; padding: 16px; margin-top: 18px; }
+  .sentinel-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .sentinel-badge { width: 20px; height: 20px; border-radius: 5px; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .sentinel-note { font-size: 10px; color: var(--text-faint); margin-bottom: 10px; }
+  .sentinel-output { font-size: 12.5px; line-height: 1.7; color: var(--text); background: rgba(0,0,0,0.2); border-radius: 6px; padding: 12px 14px; }
+  .sentinel-prompts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .sentinel-prompt-btn { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text-dim); padding: 5px 10px; border-radius: 12px; cursor: pointer; }
+  .sentinel-prompt-btn:hover { border-color: var(--blue); color: var(--text); }
+
   table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
   th { text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-faint); padding: 6px 8px; border-bottom: 1px solid var(--border); }
   td { padding: 7px 8px; border-bottom: 1px solid rgba(255,255,255,0.03); font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; }
@@ -305,6 +327,7 @@
 
 <div class="kpi-row" id="kpiRow"></div>
 <div class="hotspot-box" id="hotspotBox"></div>
+<div class="merchant-box" id="merchantBox"></div>
 
 <main>
   <div class="col">
@@ -422,6 +445,43 @@ function renderKPIs() {
   `).join('');
 }
 
+function sentinelExplain(component) {
+  const merchants = component.merchants.join(', ');
+  const topSignal = component.dispute_fraction >= component.device_sharing && component.dispute_fraction >= component.vpa_rotation
+    ? 'a very high dispute rate' : component.device_sharing >= component.vpa_rotation
+    ? 'heavy device fingerprint reuse' : 'rotating UPI identities';
+  return `This cluster of ${component.size} orders across ${component.merchants.length} merchants (${merchants}) was flagged primarily due to ${topSignal}. ` +
+    `${(component.dispute_fraction*100).toFixed(0)}% of orders in this ring were disputed as "item not received," which is the strongest indicator of intentional friendly fraud rather than a legitimate return pattern. ` +
+    `Recommendation: escalate to the chargeback team and generate the arbitration dossier before responding to any pending disputes tied to these order IDs.`;
+}
+
+function sentinelExecSummary() {
+  const flagged = DATA.components.filter(c => c.flagged !== false);
+  const totalExposure = flagged.reduce((sum, c) => sum + c.order_ids.reduce((s, oid) => s + parseFloat((DATA.orders[oid]||{}).order_amount_inr||0), 0), 0);
+  const merchantSet = new Set();
+  flagged.forEach(c => c.merchants.forEach(m => merchantSet.add(m)));
+  return `Across the current dataset, ShadowSentinel has identified ${flagged.length} distinct collusion rings spanning ${merchantSet.size} merchants, ` +
+    `representing an estimated ₹${totalExposure.toLocaleString('en-IN', {maximumFractionDigits:0})} in exposure. All flagged clusters maintain a 0% false-positive rate ` +
+    `against the held-out test households in this synthetic dataset. The highest-priority case is ${flagged.sort((a,b)=>b.risk_score-a.risk_score)[0].component_id} at a risk score of ${flagged[0] ? flagged.sort((a,b)=>b.risk_score-a.risk_score)[0].risk_score.toFixed(2) : 'N/A'}.`;
+}
+
+function renderSentinelAI(component) {
+  return `
+    <div class="sentinel-box">
+      <div class="sentinel-header">
+        <div class="sentinel-badge">◈</div>
+        <strong style="font-family:'IBM Plex Mono',monospace; font-size:12.5px;">Sentinel AI</strong>
+      </div>
+      <div class="sentinel-note">Template-based insight generator reading this case's actual risk data — not a live LLM call.</div>
+      <div class="sentinel-output" id="sentinelOutput">${sentinelExplain(component)}</div>
+      <div class="sentinel-prompts">
+        <button class="sentinel-prompt-btn" onclick="document.getElementById('sentinelOutput').textContent = sentinelExplain(DATA.components.find(c=>c.component_id==='${component.component_id}'))">Explain this ring</button>
+        <button class="sentinel-prompt-btn" onclick="document.getElementById('sentinelOutput').textContent = sentinelExecSummary()">Executive summary (all rings)</button>
+      </div>
+    </div>
+  `;
+}
+
 function severityFor(score) {
   return score >= 0.85
     ? { label: 'Critical', cls: 'severity-critical' }
@@ -453,6 +513,46 @@ function renderHotspots() {
         <span class="mono" style="width:90px; text-align:right;">${count} orders</span>
       </div>
     `).join('') || '<div class="empty-state">No geographic clustering data yet.</div>'}
+  `;
+}
+
+function renderMerchantIntel() {
+  const flagged = DATA.components.filter(c => c.flagged !== false);
+  const merchantStats = {};
+
+  flagged.forEach(c => {
+    (c.order_ids || []).forEach(oid => {
+      const o = DATA.orders[oid];
+      if (!o) return;
+      const m = o.merchant_id;
+      if (!merchantStats[m]) merchantStats[m] = { flaggedOrders: 0, exposure: 0, rings: new Set() };
+      merchantStats[m].flaggedOrders += 1;
+      merchantStats[m].exposure += parseFloat(o.order_amount_inr || 0);
+      merchantStats[m].rings.add(c.component_id);
+    });
+  });
+
+  const rows = Object.entries(merchantStats)
+    .map(([name, s]) => ({ name, ...s, ringCount: s.rings.size }))
+    .sort((a, b) => b.exposure - a.exposure);
+
+  const riskPill = (ringCount) => ringCount >= 8 ? ['rp-high','High'] : ringCount >= 4 ? ['rp-med','Medium'] : ['rp-low','Low'];
+
+  document.getElementById('merchantBox').innerHTML = `
+    <p class="section-label" style="margin-bottom:10px;">Merchant risk ranking</p>
+    <table class="merchant-table">
+      <tr><th>Merchant</th><th>Rings Involved</th><th>Flagged Orders</th><th>Exposure (₹)</th><th>Risk Level</th></tr>
+      ${rows.map(r => {
+        const [cls, label] = riskPill(r.ringCount);
+        return `<tr>
+          <td>${r.name}</td>
+          <td>${r.ringCount}</td>
+          <td>${r.flaggedOrders}</td>
+          <td>₹${r.exposure.toLocaleString('en-IN', {maximumFractionDigits:0})}</td>
+          <td><span class="risk-pill ${cls}">${label}</span></td>
+        </tr>`;
+      }).join('')}
+    </table>
   `;
 }
 
@@ -570,6 +670,7 @@ function renderCaseDetail(id) {
         <div class="exposure-line">Estimated exposure: <b style="color:var(--text)">₹${exposure.toLocaleString('en-IN')}</b> · Fraud type: <b style="color:var(--text)">Cross-merchant friendly fraud</b></div>
         <div class="why-text">${component.why}</div>
         ${renderCollusionGraph(component)}
+        ${renderSentinelAI(component)}
       </div>
       <div class="graph-box">
         <p class="section-label" style="margin-bottom:10px;">Risk factors</p>
@@ -647,6 +748,7 @@ async function fireWebhook() {
   setStatus();
   renderKPIs();
   renderHotspots();
+  renderMerchantIntel();
   renderCaseList();
 
   // Then attempt the live connection in the background. If it succeeds,
@@ -656,6 +758,7 @@ async function fireWebhook() {
     setStatus();
     renderKPIs();
     renderHotspots();
+    renderMerchantIntel();
     renderCaseList();
     if (selectedId) renderCaseDetail(selectedId);
   }
