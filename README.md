@@ -26,9 +26,27 @@ black-box classifier) so every flag comes with a human-readable reason.
 src/generate_data.py   -> synthetic orders + held-out ground truth
 src/build_graph.py     -> graph construction + component risk scoring
 src/evaluate.py        -> precision/recall/F1 against ground truth (eval-only)
-src/generate_dossier.py -> PDF evidence packet for a flagged cluster
+src/generate_dossier.py -> PDF evidence packet + SHA-256 hash chain for a flagged cluster
 src/cost_model.py      -> economic threshold sweep (INR cost vs. flag threshold)
-src/api.py             -> FastAPI webhook layer tying it all together
+src/api.py             -> FastAPI webhook layer: HMAC-signed, idempotent, ties it all together
+```
+
+## Architecture
+
+```mermaid
+flowchart TD
+    A[generate_data.py] -->|orders.csv + ground_truth.json| B[build_graph.py]
+    B -->|graph_report.json with edges + risk scores| C[evaluate.py]
+    B --> D[generate_dossier.py]
+    B --> E[cost_model.py]
+    D -->|PDF + SHA-256 hash chain| F[api.py]
+    E -->|cost_curve.json/.png| F
+    B --> F
+    F -->|GET /clusters, /order, /dossier| G[frontend/index.html]
+    F -->|POST /webhook/dispute\nHMAC verified, idempotent| G
+    G -->|Page 1: Overview| H[KPIs, hotspots, merchant ranking, case list]
+    G -->|Page 2: Investigation #/case/ID| I[Graph, risk factors, Sentinel AI, timeline]
+    C -.eval only, never feeds detection.-> B
 ```
 
 ## Try it live
@@ -44,6 +62,25 @@ uvicorn api:app --port 8000
 then open `frontend/index.html` directly in a browser — it auto-detects the
 running API and switches to LIVE mode, letting you fire real
 `payment.dispute.created` webhook events and download dossiers on demand.
+
+## Security & reliability (webhook layer)
+- **HMAC-SHA256 signature verification** on `/webhook/dispute` — if a caller
+  sends `X-Webhook-Signature`, it's cryptographically verified against the
+  raw request body; an invalid signature is rejected with 401. Requests with
+  no signature at all still work (so the live demo and any existing caller
+  aren't broken) but are honestly flagged `"signature_verified": false/None`
+  rather than silently trusted.
+- **Idempotency** — firing the same `order_id` twice within 60 seconds
+  returns the identical cached response instead of reprocessing, the
+  standard safe pattern for webhook retries/duplicates.
+- **SHA-256 evidence hash chain** in every generated dossier — each order
+  record is hashed and chained to the previous record's hash. Tampering
+  with any single record changes every hash after it, which is tested
+  directly in `tests/test_dossier_hash_chain.py`.
+- Honesty note: the webhook demo secret is intentionally visible in
+  `frontend/index.html` so the live demo can compute a real signature
+  client-side. A real deployment would never ship a secret to the browser —
+  this is stated in the code comments, not hidden.
 
 ## Tests
 ```bash
