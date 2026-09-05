@@ -15,6 +15,7 @@ project's scope. Don't claim compliance you haven't verified.
 
 import argparse
 import csv
+import hashlib
 import json
 from datetime import datetime
 
@@ -40,6 +41,40 @@ def load_component(report_path, component_id):
         if c["component_id"] == component_id:
             return c
     raise ValueError(f"component {component_id} not found in {report_path}")
+
+
+def compute_evidence_hash_chain(component, orders):
+    """
+    Builds a SHA-256 hash chain over this cluster's order evidence records,
+    in the order they appear in component['order_ids']. Each record's hash
+    includes the previous record's hash, so any tampering with an earlier
+    record changes every hash after it — a standard chain-of-custody
+    pattern, not a novel cryptographic claim. Returns (chain, head_hash).
+    """
+    chain = []
+    prev_hash = "0" * 64  # genesis block
+    for oid in component["order_ids"]:
+        o = orders.get(oid, {})
+        record = "|".join([
+            oid,
+            o.get("merchant_id", ""),
+            o.get("order_date", ""),
+            str(o.get("order_amount_inr", "")),
+            o.get("device_fingerprint", ""),
+            o.get("upi_vpa", ""),
+            prev_hash,
+        ])
+        record_hash = hashlib.sha256(record.encode("utf-8")).hexdigest()
+        chain.append({"order_id": oid, "record_hash": record_hash, "prev_hash": prev_hash})
+        prev_hash = record_hash
+    return chain, prev_hash
+
+
+def verify_evidence_hash_chain(component, orders, chain):
+    """Recomputes the chain from scratch and checks it matches — proves the
+    chain is internally consistent, not that the underlying data is true."""
+    recomputed_chain, recomputed_head = compute_evidence_hash_chain(component, orders)
+    return recomputed_chain == chain
 
 
 def build_dossier(component, orders, outpath):
@@ -152,6 +187,31 @@ def build_dossier(component, orders, outpath):
         ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f5f5f5")]),
     ]))
     story.append(t3)
+
+    # --- Evidence hash chain (chain of custody) ---
+    chain, head_hash = compute_evidence_hash_chain(component, orders)
+    story.append(Paragraph("5. Evidence Hash Chain (Chain of Custody)", styles["SectionHeader"]))
+    story.append(Paragraph(
+        "Each order record below is hashed with SHA-256, chained to the previous record's hash. "
+        "This proves internal consistency of this document — if any evidence record were altered "
+        "after generation, every hash from that point forward would change, making tampering "
+        "detectable. It does not independently verify the underlying order data itself.",
+        styles["SmallGrey"]))
+    chain_rows = [["Order ID", "Record Hash (first 16 chars)"]]
+    for entry in chain:
+        chain_rows.append([entry["order_id"], entry["record_hash"][:16] + "…"])
+    t4 = Table(chain_rows, colWidths=[1.8 * inch, 3.5 * inch], repeatRows=1)
+    t4.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#16213e")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("FONTNAME", (0, 0), (-1, -1), "Courier"),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#cccccc")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f5f5f5")]),
+    ]))
+    story.append(t4)
+    story.append(Spacer(1, 6))
+    story.append(Paragraph(f"<b>Chain head hash:</b> {head_hash}", styles["SmallGrey"]))
 
     # --- Footer disclaimer (kept with the preceding rule so it can't strand alone on a new page) ---
     from reportlab.platypus import KeepTogether
