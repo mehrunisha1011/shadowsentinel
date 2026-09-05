@@ -87,10 +87,15 @@ running API and switches to LIVE mode, letting you fire real
 pip install pytest
 python3 -m pytest tests/ -v
 ```
-13 tests, including two that directly regression-test the multi-signal-edge
-bug described below (over-merging at `min_signals=1` vs. correct separation
-at `min_signals=2`) — not just a coverage number, but a proof that the fix
-documented in ARCHITECTURE.md actually holds.
+
+![23 passing tests](tests_passing.png)
+
+23 tests, all passing, including two that directly regression-test the
+multi-signal-edge bug described below (over-merging at `min_signals=1` vs.
+correct separation at `min_signals=2`), plus dedicated coverage for the
+SHA-256 dossier hash chain and HMAC webhook security — not just a coverage
+number, but a proof that the fixes documented in ARCHITECTURE.md actually
+hold.
 
 ## Running it
 ```bash
