@@ -788,6 +788,22 @@ async function downloadDossier(componentId) {
   window.open(`${API_BASE}/dossier/${componentId}`, '_blank');
 }
 
+// DEMO-ONLY shared secret matching the backend's default. In a real system
+// this would never live in frontend JS -- a browser can't hold a secret
+// (anyone can view page source). This exists so the live demo can show a
+// genuinely verified HMAC signature end-to-end, with that limitation stated
+// plainly rather than pretending this is production-secure.
+const DEMO_WEBHOOK_SECRET = 'demo-shared-secret-not-for-production';
+
+async function hmacSha256Hex(secret, message) {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const sigBuffer = await crypto.subtle.sign('HMAC', key, enc.encode(message));
+  return Array.from(new Uint8Array(sigBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function fireWebhook() {
   const input = document.getElementById('orderIdInput');
   const orderId = input.value.trim();
@@ -800,24 +816,28 @@ async function fireWebhook() {
   }
 
   try {
+    const bodyStr = JSON.stringify({ order_id: orderId });
+    const signature = await hmacSha256Hex(DEMO_WEBHOOK_SECRET, bodyStr);
     const res = await fetch(`${API_BASE}/webhook/dispute`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ order_id: orderId }),
+      headers: { 'Content-Type': 'application/json', 'X-Webhook-Signature': signature },
+      body: bodyStr,
     });
     const json = await res.json();
     const tagClass = json.action === 'escalate_and_generate_dossier' ? 'tag-escalate' : 'tag-isolated';
+    const sigLine = json.signature_verified === true ? '\n✓ HMAC signature verified'
+      : json.signature_verified === false ? '\n✗ HMAC signature INVALID' : '';
+    const replayLine = json.idempotent_replay ? '\n↺ idempotent replay (duplicate event within 60s)' : '';
     log.innerHTML = `<div class="log-line">
       <span class="${tagClass}">${json.action || 'error'}</span> — ${orderId}
       ${json.risk_score !== undefined ? `\nrisk_score: ${json.risk_score}` : ''}
       ${json.reason ? `\n${json.reason}` : ''}
-      ${json.why ? `\n${json.why}` : ''}
+      ${json.why ? `\n${json.why}` : ''}${sigLine}${replayLine}
     </div>` + log.innerHTML;
   } catch (e) {
     log.innerHTML = `<div class="log-line"><span class="tag-error">ERROR</span> — could not reach API: ${e.message}</div>` + log.innerHTML;
   }
 }
-
 (async function init() {
   // Show demo data IMMEDIATELY so the page is never blank, even if the
   // live server is asleep and takes up to a minute to respond.
