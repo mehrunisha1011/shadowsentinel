@@ -63,6 +63,9 @@ then open `frontend/index.html` directly in a browser — it auto-detects the
 running API and switches to LIVE mode, letting you fire real
 `payment.dispute.created` webhook events and download dossiers on demand.
 
+ **Backend health check:**
+ https://shadowsentinel.onrender.com/health
+
 ## Security & reliability (webhook layer)
 - **HMAC-SHA256 signature verification** on `/webhook/dispute` — if a caller
   sends `X-Webhook-Signature`, it's cryptographically verified against the
